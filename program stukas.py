@@ -16,6 +16,7 @@
 suku_bunga = int(input("masukan suku bunga : "))
 lama_investasi = int(input("masukan lama investasi : "))
 aruskas_pengeluaran = int(input("masukan arus kas pemasukan : "))
+#mana input yang satunya
 
 #perhitungan pemasukan tambahan
 pemasukan_tambahan = input("apakah ada pemasukan tambahan? (yes/no)")
