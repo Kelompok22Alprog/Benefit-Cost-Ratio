@@ -31,4 +31,23 @@ while pengeluaran_tambahan == "yes" :
     pengeluaran_tambahan = input("apakah ada pengeluaran tambahan lain? (yes/no)")
 
 #menghitung present value cost
+i = 0
+sigmapvcost = 0
+sigmapvbenefit = 0
+for i in range(0, lama_investasi+1):
+    pvcost = float(aruskas_pengeluaran / (((suku_bunga/100 + 1) ** i)))
+    i += 1
+    sigmapvcost += pvcost
 
+#menghitung present value benefit
+for i in range (0,lama_investasi+1):
+    pvbenefit = float(aruskas_pemasukan / (((suku_bunga/100 + 1) ** i)))
+    i += 1
+    sigmapvbenefit += pvbenefit 
+
+print(sigmapvbenefit)
+print(sigmapvcost)
+
+#menghitung bcr
+bcr = (sigmapvbenefit/sigmapvcost)
+print(bcr)
