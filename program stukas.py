@@ -152,8 +152,6 @@ while menghitungkembali == 'yes':
     jenispemasukan_tambahan = []
     pemasukan_tambahan = []
     inputpemasukan_tambahan = str(input("Apakah ada pemasukan tambahan? (yes/no) : ")).lower()
-    t1 = 0
-    t2 = 0
     while inputpemasukan_tambahan == "yes" :    
             while True:
                 try:
@@ -163,7 +161,6 @@ while menghitungkembali == 'yes':
                         jenispemasukan_tambahan.append(variabel_pemasukantambahan)
                         pemasukan_tambahan.append(nilai_pemasukantambahan)
                         inputpemasukan_tambahan = str(input("Apakah ada pemasukan tambahan lain? (yes/no) : ")).lower()
-                        t1 += 1
                         break
                     else:
                         print('=' * 25)
@@ -191,7 +188,6 @@ while menghitungkembali == 'yes':
                     jenispengeluaran_tambahan.append(variabel_pengeluarantambahan)
                     pengeluaran_tambahan.append(nilai_pengeluarantambahan)
                     inputpengeluaran_tambahan = str(input("Apakah ada pengeluaran tambahan lain? (yes/no) : ")).lower()
-                    t2 += 1
                     break
                 else:
                     print('=' * 25)
@@ -214,12 +210,13 @@ while menghitungkembali == 'yes':
 
     #Tampilkan Arus Kas Pemasukan, Arus Kas Pengeluaran, Present Value Cost, dan Present Value Benefit per Periode dalam bentuk tabel
     tabel = {
+        'Periode ke' : [0, lama_investasi],
         'Arus Kas Pemasukan' : kas_pemasukan,
         'Arus Kas Pengeluaran' : kas_pengeluaran,
         'Present Value Benefit' : pvbenefit_perperiode,
         'Present Value Cost' : pvcost_perperiode
     }
-    dataframe = pd.DataFrame(tabel, [0, lama_investasi])
+    dataframe = pd.DataFrame(tabel, [1, lama_investasi + 1])
     print(dataframe,'\n')
 
     #Tampilkan Jenis dan Nilai Pemasukan dan Pengeluaran tambahan dalam bentuk tabel.
@@ -231,10 +228,21 @@ while menghitungkembali == 'yes':
         'Variabel Pengeluaran Tambahan' : jenispengeluaran_tambahan,
         'Nilai Pengeluaran Tambahan' : pengeluaran_tambahan
     }
-    dataframe1 = pd.DataFrame(tabel1, [1, t1])
-    print(dataframe1,'\n')
-    dataframe2 = pd.DataFrame(tabel2, [1, t2])
-    print(dataframe2,'\n')
+    if len(jenispemasukan_tambahan) > 0:
+        dataframe1 = pd.DataFrame(tabel1, [1, len(jenispemasukan_tambahan)])
+        print(dataframe1,'\n')
+    else:
+        print('=' * 25)
+        print('Tidak ada Tabel Data Pemasukan Tambahan')
+        print('=' * 25)
+
+    if len(jenispengeluaran_tambahan) > 0:
+        dataframe2 = pd.DataFrame(tabel2, [1, len(jenispengeluaran_tambahan)])
+        print(dataframe2,'\n')
+    else:
+        print('=' * 25)
+        print('Tidak ada Tabel Data Pengeluaran Tambahan')
+        print('=' * 25)
 
     #Tampilkan Total Pemasukan dan Total Pengeluaran dalam grafik batang.
     sbx = ['Total Pemasukan', 'Total Pengeluaran']
