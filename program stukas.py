@@ -1,10 +1,8 @@
 #input : suku bunga, lama investasi, arus kas pemasukan dan pengeluaran suatu periode, pemasukan tambahan, dan pengeluaran tambahan.
 #output : PV Benefit, PV cost, nilai BCR, kelayakan proyek, total pemasukan dan pengeluaran.
 import time
-import datetime
 import pandas as pd
 import matplotlib.pyplot as plt
-import numpy as np
 #Login
 unpw = {'dayyin': '1234','aldi':'4321', 'lea': '0702', 'maura':'6789', 'aji':'5432'}
 def login (un,pw):
@@ -116,9 +114,6 @@ while menghitungkembali == 'yes':
                 print('=' * 25)
                 continue
 
-    print('Arus Kas Pemasukan :\n', kas_pemasukan,'\n')
-    print('Arus Kas Pengeluaran :\n', kas_pengeluaran,'\n')
-
     #Menghitung present value benefit
     p = 0
     q = 0
@@ -147,20 +142,6 @@ while menghitungkembali == 'yes':
         else:
             break
 
-    print('PV Benefit Per Periode :\n', pvbenefit_perperiode,'\n')
-    print('PV Cost Per Periode :\n', pvcost_perperiode,'\n')
-    print('Total Nilai PV Benefit :\n', sigmapvbenefit,'\n')
-    print('Total Nilai PV Cost :\n', sigmapvcost,'\n')
-
-    #Menghitung bcr
-    bcr = float(sigmapvbenefit/sigmapvcost)
-    print('Nilai BCR :\n', "{:.2f}".format(bcr))
-    if bcr >= 1:
-        print('Nilai BCR =', "{:.2f}".format(bcr), "dan Proyek Investasi dapat diterima atau layak.",'\n')
-    else:
-        print('Nilai BCR =', "{:.2f}".format(bcr), "dan Proyek Investasi tidak dapat diterima atau tidak layak.",'\n')
-    print('=' * 50)
-
     #Perhitungan pemasukan tambahan
     jenispemasukan_tambahan = []
     pemasukan_tambahan = []
@@ -180,7 +161,7 @@ while menghitungkembali == 'yes':
             print("Masukkan string bernilai yes/no")
             print('=' * 25)
             continue
-
+    print('=' * 50)
     while inputpemasukan_tambahan == "yes" :    
             while True:
                 try:
@@ -201,9 +182,7 @@ while menghitungkembali == 'yes':
                     print("Masukkan integer untuk nilai pemasukan")
                     print('=' * 25)
                     continue
-    print(jenispemasukan_tambahan)
-    print(pemasukan_tambahan)
-
+    print('=' * 50)
     #Perhitungan pengeluaran tambahan
     jenispengeluaran_tambahan = []
     pengeluaran_tambahan = []
@@ -224,7 +203,7 @@ while menghitungkembali == 'yes':
             print('=' * 25)
             continue
 
-    
+    print('=' * 50)
     while inputpengeluaran_tambahan == "yes" :
         while True:
             try:
@@ -245,16 +224,23 @@ while menghitungkembali == 'yes':
                 print("Masukkan integer untuk nilai pengeluaran")
                 print('=' * 25)
                 continue
-    print(jenispengeluaran_tambahan)
-    print(pengeluaran_tambahan)
+    print('=' * 50)
+
+    #Menghitung bcr
+    bcr = float(sigmapvbenefit/sigmapvcost)
+    print('Nilai BCR :\n', "{:.2f}".format(bcr))
+    if bcr >= 1:
+        print('Nilai BCR =', "{:.2f}".format(bcr), "dan Proyek Investasi dapat diterima atau layak.")
+    else:
+        print('Nilai BCR =', "{:.2f}".format(bcr), "dan Proyek Investasi tidak dapat diterima atau tidak layak.")
     print('=' * 50)
 
     #Total pemasukan dan pengeluaran
     total_pemasukan = sigmapvbenefit + sum(pemasukan_tambahan)
     total_pengeluaran = sigmapvcost + sum(pengeluaran_tambahan)
-    print('Total Pemasukan =', total_pemasukan,'\n')
-    print('Total Pengeluaran =', total_pengeluaran,'\n')
-
+    print('Total Pemasukan =', total_pemasukan)
+    print('Total Pengeluaran =', total_pengeluaran)
+    print('=' * 50)
     #Tampilkan Arus Kas Pemasukan, Arus Kas Pengeluaran, Present Value Cost, dan Present Value Benefit per Periode dalam bentuk tabel
     tabel = {
         'Periode ke' : lama_investasilist,
@@ -264,8 +250,9 @@ while menghitungkembali == 'yes':
         'Present Value Cost' : pvcost_perperiode
     }
     
-    dataframe = pd.DataFrame(tabel, index = pd.RangeIndex(start= 1, stop= lama_investasi + 2))
-    print(dataframe,'\n')
+    dataframe = pd.DataFrame(tabel)
+    print('-----Tabel Arus Kas dan PV Per Periode-----', '\n')
+    print(dataframe.to_string(index = False))
 
     #Tampilkan Jenis dan Nilai Pemasukan dan Pengeluaran tambahan dalam bentuk tabel.
     tabel1 = {
@@ -276,9 +263,12 @@ while menghitungkembali == 'yes':
         'Variabel Pengeluaran Tambahan' : jenispengeluaran_tambahan,
         'Nilai Pengeluaran Tambahan' : pengeluaran_tambahan
     }
+
     if len(jenispemasukan_tambahan) > 0:
         dataframe1 = pd.DataFrame(tabel1, index = pd.RangeIndex(start = 1, stop = len(jenispemasukan_tambahan) + 1))
-        print(dataframe1,'\n')
+        print('\n','-----Tabel Pemasukan Tambahan-----', '\n')
+        print(dataframe1)
+        
     else:
         print('=' * 25)
         print('Tidak dapat menampilkan Tabel Data Pemasukan Tambahan')
@@ -286,7 +276,9 @@ while menghitungkembali == 'yes':
 
     if len(jenispengeluaran_tambahan) > 0:
         dataframe2 = pd.DataFrame(tabel2, index = pd.RangeIndex(start = 1, stop = len(jenispengeluaran_tambahan) + 1))
+        print('\n','-----Tabel Pengeluaran Tambahan-----', '\n')
         print(dataframe2,'\n')
+        
     else:
         print('=' * 25)
         print('Tidak dapat menampilkan Tabel Data Pengeluaran Tambahan')
