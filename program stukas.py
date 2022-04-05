@@ -39,9 +39,7 @@ while menghitungkembali == 'yes':
     while True:
         try:
             lama_investasi = int(input("Masukkan lama investasi (tahun) : "))
-            suku_bunga = int(input("Masukkan suku bunga arus kas pemasukan (x%) : "))
-            print('=' * 50)
-            if lama_investasi and suku_bunga > 0:
+            if lama_investasi >= 0:
                 break
             else:
                 print('=' * 25)
@@ -52,13 +50,27 @@ while menghitungkembali == 'yes':
             print("Masukkan nilai berupa Integer")
             print('=' * 25)
             continue
-
+    while True:
+        try:
+            suku_bunga = int(input("Masukkan suku bunga arus kas pemasukan (x%) : "))
+            print('=' * 50)
+            if lama_investasi >= 0:
+                break
+            else:
+                print('=' * 25)
+                print('Nilai Input tidak valid ( < 0)')
+                print('=' * 25)
+        except ValueError:
+            print('=' * 25)
+            print("Masukkan nilai berupa Integer")
+            print('=' * 25)
+            continue
     #Arus Kas Pemasukan
     x = 0
     y = 0
     kas_pemasukan = []
     kas_pengeluaran = []
-
+    lama_investasilist = []
     print('---ARUS KAS PEMASUKAN---')
     for x in range(0, lama_investasi + 1):
         while True:
@@ -68,6 +80,7 @@ while menghitungkembali == 'yes':
                 if aruskas_pemasukan >= 0:
                     print('Arus kas pemasukan pada periode ke', x, '=', aruskas_pemasukan)
                     kas_pemasukan.append(aruskas_pemasukan)
+                    lama_investasilist.append(x)
                     print('=' * 50)
                     x += 1
                     break
@@ -151,7 +164,23 @@ while menghitungkembali == 'yes':
     #Perhitungan pemasukan tambahan
     jenispemasukan_tambahan = []
     pemasukan_tambahan = []
-    inputpemasukan_tambahan = str(input("Apakah ada pemasukan tambahan? (yes/no) : ")).lower()
+    while True:
+        try:
+            inputpemasukan_tambahan = str(input("Apakah ada pemasukan tambahan? (yes/no) : ")).lower()
+            if inputpemasukan_tambahan == 'yes':
+                break
+            elif inputpemasukan_tambahan == 'no':
+                break
+            else:
+                print('=' * 25)
+                print('Nilai Input tidak valid (yes atau no)')
+                print('=' * 25)
+        except ValueError:
+            print('=' * 25)
+            print("Masukkan string bernilai yes/no")
+            print('=' * 25)
+            continue
+
     while inputpemasukan_tambahan == "yes" :    
             while True:
                 try:
@@ -160,6 +189,7 @@ while menghitungkembali == 'yes':
                     if nilai_pemasukantambahan >= 0:
                         jenispemasukan_tambahan.append(variabel_pemasukantambahan)
                         pemasukan_tambahan.append(nilai_pemasukantambahan)
+                        print('=' * 25)
                         inputpemasukan_tambahan = str(input("Apakah ada pemasukan tambahan lain? (yes/no) : ")).lower()
                         break
                     else:
@@ -177,7 +207,23 @@ while menghitungkembali == 'yes':
     #Perhitungan pengeluaran tambahan
     jenispengeluaran_tambahan = []
     pengeluaran_tambahan = []
-    inputpengeluaran_tambahan = str(input("Apakah ada pengeluaran tambahan? (yes/no) : ")).lower()
+    while True:
+        try:
+            inputpengeluaran_tambahan = str(input("Apakah ada pengeluaran tambahan? (yes/no) : ")).lower()
+            if inputpengeluaran_tambahan =='yes':
+                break
+            elif inputpengeluaran_tambahan == 'no':
+                break
+            else:
+                print('=' * 25)
+                print('Nilai Input tidak valid (yes atau no)')
+                print('=' * 25)
+        except ValueError:
+            print('=' * 25)
+            print("Masukkan string bernilai yes/no")
+            print('=' * 25)
+            continue
+
     
     while inputpengeluaran_tambahan == "yes" :
         while True:
@@ -187,6 +233,7 @@ while menghitungkembali == 'yes':
                 if nilai_pengeluarantambahan >= 0:      
                     jenispengeluaran_tambahan.append(variabel_pengeluarantambahan)
                     pengeluaran_tambahan.append(nilai_pengeluarantambahan)
+                    print('=' * 25)
                     inputpengeluaran_tambahan = str(input("Apakah ada pengeluaran tambahan lain? (yes/no) : ")).lower()
                     break
                 else:
@@ -210,13 +257,14 @@ while menghitungkembali == 'yes':
 
     #Tampilkan Arus Kas Pemasukan, Arus Kas Pengeluaran, Present Value Cost, dan Present Value Benefit per Periode dalam bentuk tabel
     tabel = {
-        'Periode ke' : [0, lama_investasi],
+        'Periode ke' : lama_investasilist,
         'Arus Kas Pemasukan' : kas_pemasukan,
         'Arus Kas Pengeluaran' : kas_pengeluaran,
         'Present Value Benefit' : pvbenefit_perperiode,
         'Present Value Cost' : pvcost_perperiode
     }
-    dataframe = pd.DataFrame(tabel, [1, lama_investasi + 1])
+    
+    dataframe = pd.DataFrame(tabel, index = pd.RangeIndex(start= 1, stop= lama_investasi + 2))
     print(dataframe,'\n')
 
     #Tampilkan Jenis dan Nilai Pemasukan dan Pengeluaran tambahan dalam bentuk tabel.
@@ -229,19 +277,19 @@ while menghitungkembali == 'yes':
         'Nilai Pengeluaran Tambahan' : pengeluaran_tambahan
     }
     if len(jenispemasukan_tambahan) > 0:
-        dataframe1 = pd.DataFrame(tabel1, [1, len(jenispemasukan_tambahan)])
+        dataframe1 = pd.DataFrame(tabel1, index = pd.RangeIndex(start = 1, stop = len(jenispemasukan_tambahan) + 1))
         print(dataframe1,'\n')
     else:
         print('=' * 25)
-        print('Tidak ada Tabel Data Pemasukan Tambahan')
+        print('Tidak dapat menampilkan Tabel Data Pemasukan Tambahan')
         print('=' * 25)
 
     if len(jenispengeluaran_tambahan) > 0:
-        dataframe2 = pd.DataFrame(tabel2, [1, len(jenispengeluaran_tambahan)])
+        dataframe2 = pd.DataFrame(tabel2, index = pd.RangeIndex(start = 1, stop = len(jenispengeluaran_tambahan) + 1))
         print(dataframe2,'\n')
     else:
         print('=' * 25)
-        print('Tidak ada Tabel Data Pengeluaran Tambahan')
+        print('Tidak dapat menampilkan Tabel Data Pengeluaran Tambahan')
         print('=' * 25)
 
     #Tampilkan Total Pemasukan dan Total Pengeluaran dalam grafik batang.
@@ -252,7 +300,23 @@ while menghitungkembali == 'yes':
     plt.show()
 
     #Menghitung Kembali
-    menghitungkembali = str(input('Apakah ingin menghitung nilai BCR lain? (yes/no) : ').lower())
+    while True:
+        try:
+            menghitungkembali = str(input('Apakah ingin menghitung nilai BCR lain? (yes/no) : ').lower())
+            if menghitungkembali == 'yes':
+                break
+            elif menghitungkembali == 'no':
+                break
+            else:
+                print('=' * 25)
+                print('Nilai Input tidak valid (yes atau no)')
+                print('=' * 25)
+        except ValueError:
+            print('=' * 25)
+            print("Masukkan string bernilai yes/no")
+            print('=' * 25)
+            continue
+
     print('=' * 50)
 print('Terima Kasih telah menggunakan Kalkulator BCR')
 print('=' * 50)
